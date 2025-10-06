@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSU Classroom Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #782F40 0%, #CEB888 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #782F40;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .room-name {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .time {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .preview-section {
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            flex: 0 0 auto;
+            height: 280px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-label {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .audio-indicator {
+            background: rgba(40, 167, 69, 0.2);
+            border: 2px solid #28a745;
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .preview-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .preview-screen {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-screen.active {
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .screen-title {
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .screen-status {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+        }
+
+        .screen-source {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            flex: 0 0 auto;
+        }
+
+        .control-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .control-section.sources {
+            grid-column: span 3;
+        }
+
+        .control-section.display {
+            grid-column: span 2;
+        }
+
+        .control-section.camera {
+            grid-column: span 1;
+        }
+
+        .control-section.audio {
+            grid-column: span 2;
+        }
+
+        .control-section.volume {
+            grid-column: span 2;
+        }
+
+        .control-section.power {
+            grid-column: span 2;
+        }
+
+        .section-title {
+            color: #782F40;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        .button-grid.triple {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .button-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .control-btn {
+            background: white;
+            border: 2px solid #782F40;
+            border-radius: 8px;
+            padding: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            color: #782F40;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-btn:hover {
+            background: #782F40;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(120, 47, 64, 0.3);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-btn.active {
+            background: #782F40;
+            color: white;
+        }
+
+        .control-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .icon {
+            font-size: 18px;
+            order: 2;
+        }
+
+        .control-btn span:not(.icon) {
+            order: 1;
+        }
+
+        .display-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .display-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .display-group .control-btn {
+            flex: 1;
+        }
+
+        .group-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #782F40;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .power-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .power-btn {
+            background: white;
+            border: 3px solid #28a745;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #28a745;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .power-btn:hover {
+            background: #28a745;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .power-btn.off {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .power-btn.off:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .volume-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #782F40;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #782F40;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .mute-btn {
+            background: #782F40;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 9px;
+            transition: all 0.2s;
+        }
+
+        .mute-btn:hover {
+            background: #5a2330;
+        }
+
+        .mute-btn.muted {
+            background: #dc3545;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto;
+            }
+            
+            .control-panel {
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="room-name">SANDBOX</div>
+        </div>
+        <div class="header-right">
+            <div class="time" id="currentTime">Oct 5, 2025 12:00 PM</div>
+            <button class="settings-btn">
+                <span style="font-size: 20px;">⚙️</span>
+                Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="preview-section">
+            <div class="preview-header">
+                <div class="preview-label">Display Preview</div>
+                <div class="audio-indicator">
+                    <span>🔊</span>
+                    <span id="audioSource">Desktop PC</span>
+                </div>
+            </div>
+            <div class="preview-container">
+                <div class="preview-screen" id="leftScreen">
+                    <div class="screen-header">
+                        <div class="screen-title">Left Projector</div>
+                        <div class="screen-status" id="leftStatus">Ready</div>
+                    </div>
+                    <div class="screen-source" id="leftSource">No Input</div>
+                </div>
+                <div class="preview-screen" id="rightScreen">
+                    <div class="screen-header">
+                        <div class="screen-title">Right Projector</div>
+                        <div class="screen-status" id="rightStatus">Ready</div>
+                    </div>
+                    <div class="screen-source" id="rightSource">No Input</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <div class="control-section sources">
+                <div class="section-title">Input Sources</div>
+                <div class="button-grid triple">
+                    <button class="control-btn" data-source="Desktop PC">
+                        Desktop PC
+                        <span class="icon">🖥️</span>
+                    </button>
+                    <button class="control-btn" data-source="Laptop">
+                        Laptop
+                        <span class="icon">💻</span>
+                    </button>
+                    <button class="control-btn" data-source="Document Camera">
+                        Doc Cam
+                        <span class="icon">📹</span>
+                    </button>
+                    <button class="control-btn" data-source="Wireless Stream">
+                        Wireless
+                        <span class="icon">📡</span>
+                    </button>
+                    <button class="control-btn" data-source="Blu-ray Player">
+                        Blu-ray
+                        <span class="icon">📀</span>
+                    </button>
+                    <button class="control-btn" data-source="Camera Feed">
+                        Camera
+                        <span class="icon">🎥</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section display">
+                <div class="section-title">Display Control</div>
+                <div class="display-controls">
+                    <div>
+                        <div class="group-label">Left Screen</div>
+                        <div class="display-group">
+                            <button class="control-btn" data-action="left-preview">
+                                Preview
+                                <span class="icon">👁️</span>
+                            </button>
+                            <button class="control-btn" data-action="left-project">
+                                Project
+                                <span class="icon">▶️</span>
+                            </button>
+                            <button class="control-btn" data-action="left-mute">
+                                Blank
+                                <span class="icon">⬛</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="group-label">Right Screen</div>
+                        <div class="display-group">
+                            <button class="control-btn" data-action="right-preview">
+                                Preview
+                                <span class="icon">👁️</span>
+                            </button>
+                            <button class="control-btn" data-action="right-project">
+                                Project
+                                <span class="icon">▶️</span>
+                            </button>
+                            <button class="control-btn" data-action="right-mute">
+                                Blank
+                                <span class="icon">⬛</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section camera">
+                <div class="section-title">Camera</div>
+                <div class="button-grid single">
+                    <button class="control-btn" data-action="camera-preset-1">
+                        Preset 1
+                        <span class="icon">📍</span>
+                    </button>
+                    <button class="control-btn" data-action="camera-preset-2">
+                        Preset 2
+                        <span class="icon">📍</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section audio">
+                <div class="section-title">Audio Source</div>
+                <div class="button-grid single">
+                    <button class="control-btn active" data-action="listen">
+                        <span id="listenToLabel">Listening: Desktop PC</span>
+                        <span class="icon">🎧</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section volume">
+                <div class="section-title">Volume Control</div>
+                <div class="volume-control">
+                    <span style="font-size: 16px;">🔊</span>
+                    <input type="range" class="volume-slider" min="0" max="100" value="50" id="volumeSlider">
+                    <span id="volumeLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
+                    <button class="mute-btn" id="muteBtn">Mute</button>
+                </div>
+            </div>
+
+            <div class="control-section power">
+                <div class="section-title">Power Control</div>
+                <div class="power-section">
+                    <button class="power-btn" id="powerOn">
+                        <span>⚡</span>
+                        Power On
+                    </button>
+                    <button class="power-btn off" id="powerOff">
+                        <span>🔌</span>
+                        Power Off
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let state = {
+            selectedSource: null,
+            leftProjector: null,
+            rightProjector: null,
+            audioSource: 'Desktop PC',
+            volume: 50,
+            isMuted: false,
+            isPowerOn: false
+        };
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric', 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            };
+            document.getElementById('currentTime').textContent = now.toLocaleString('en-US', options);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Source selection
+        document.querySelectorAll('[data-source]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const source = this.getAttribute('data-source');
+                state.selectedSource = source;
+                
+                // Update button states
+                document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update audio source
+                state.audioSource = source;
+                document.getElementById('audioSource').textContent = source;
+                document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
+            });
+        });
+
+        // Display controls
+        document.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.getAttribute('data-action');
+                
+                if (action === 'left-preview') {
+                    if (state.selectedSource) {
+                        document.getElementById('leftSource').textContent = `Preview: ${state.selectedSource}`;
+                    }
+                } else if (action === 'left-project') {
+                    if (state.selectedSource) {
+                        state.leftProjector = state.selectedSource;
+                        document.getElementById('leftSource').textContent = state.selectedSource;
+                        document.getElementById('leftStatus').textContent = 'Projecting';
+                        document.getElementById('leftScreen').classList.add('active');
+                    }
+                } else if (action === 'left-mute') {
+                    document.getElementById('leftSource').textContent = 'Blanked';
+                    document.getElementById('leftStatus').textContent = 'Muted';
+                    document.getElementById('leftScreen').classList.remove('active');
+                } else if (action === 'right-preview') {
+                    if (state.selectedSource) {
+                        document.getElementById('rightSource').textContent = `Preview: ${state.selectedSource}`;
+                    }
+                } else if (action === 'right-project') {
+                    if (state.selectedSource) {
+                        state.rightProjector = state.selectedSource;
+                        document.getElementById('rightSource').textContent = state.selectedSource;
+                        document.getElementById('rightStatus').textContent = 'Projecting';
+                        document.getElementById('rightScreen').classList.add('active');
+                    }
+                } else if (action === 'right-mute') {
+                    document.getElementById('rightSource').textContent = 'Blanked';
+                    document.getElementById('rightStatus').textContent = 'Muted';
+                    document.getElementById('rightScreen').classList.remove('active');
+                }
+            });
+        });
+
+        // Volume control
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeLevel = document.getElementById('volumeLevel');
+        const muteBtn = document.getElementById('muteBtn');
+
+        volumeSlider.addEventListener('input', function() {
+            state.volume = this.value;
+            volumeLevel.textContent = this.value + '%';
+            
+            if (this.value > 0 && state.isMuted) {
+                state.isMuted = false;
+                muteBtn.textContent = 'Mute';
+                muteBtn.classList.remove('muted');
+            }
+        });
+
+        muteBtn.addEventListener('click', function() {
+            state.isMuted = !state.isMuted;
+            
+            if (state.isMuted) {
+                volumeSlider.value = 0;
+                volumeLevel.textContent = '0%';
+                this.textContent = 'Unmute';
+                this.classList.add('muted');
+            } else {
+                volumeSlider.value = state.volume || 50;
+                volumeLevel.textContent = volumeSlider.value + '%';
+                this.textContent = 'Mute';
+                this.classList.remove('muted');
+            }
+        });
+
+        // Power controls
+        document.getElementById('powerOn').addEventListener('click', function() {
+            state.isPowerOn = true;
+            document.getElementById('leftStatus').textContent = 'Ready';
+            document.getElementById('rightStatus').textContent = 'Ready';
+        });
+
+        document.getElementById('powerOff').addEventListener('click', function() {
+            state.isPowerOn = false;
+            state.leftProjector = null;
+            state.rightProjector = null;
+            document.getElementById('leftSource').textContent = 'No Input';
+            document.getElementById('rightSource').textContent = 'No Input';
+            document.getElementById('leftStatus').textContent = 'Off';
+            document.getElementById('rightStatus').textContent = 'Off';
+            document.getElementById('leftScreen').classList.remove('active');
+            document.getElementById('rightScreen').classList.remove('active');
+        });
+    </script>
+</body>
+</html>
