@@ -454,6 +454,20 @@
             margin-top: 6px;
         }
 
+        .mic-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .control-label {
+            font-size: 9px;
+            font-weight: bold;
+            color: #782F40;
+            margin-bottom: 4px;
+        }
+
         .volume-slider {
             flex: 1;
             height: 6px;
@@ -709,11 +723,23 @@
 
             <div class="control-section volume">
                 <div class="section-title">Volume Control</div>
-                <div class="volume-control">
-                    <span style="font-size: 16px;">🔊</span>
-                    <input type="range" class="volume-slider" min="0" max="100" value="50" id="volumeSlider">
-                    <span id="volumeLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
-                    <button class="mute-btn" id="muteBtn">Mute</button>
+                <div>
+                    <div class="control-label">Speaker Volume</div>
+                    <div class="volume-control">
+                        <span style="font-size: 16px;">🔊</span>
+                        <input type="range" class="volume-slider" min="0" max="100" value="50" id="volumeSlider">
+                        <span id="volumeLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
+                        <button class="mute-btn" id="muteBtn">Mute</button>
+                    </div>
+                </div>
+                <div style="margin-top: 8px;">
+                    <div class="control-label">Microphone Level</div>
+                    <div class="mic-control">
+                        <span style="font-size: 16px;">🎤</span>
+                        <input type="range" class="volume-slider" min="0" max="100" value="50" id="micSlider">
+                        <span id="micLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
+                        <button class="mute-btn" id="micMuteBtn">Mute</button>
+                    </div>
                 </div>
             </div>
 
@@ -764,6 +790,14 @@
             }
         });
 
+        // Confirmation modal
+        function showConfirmation(message, onConfirm) {
+            const confirmed = confirm(message);
+            if (confirmed && onConfirm) {
+                onConfirm();
+            }
+        }
+
         // Update time
         function updateTime() {
             const now = new Date();
@@ -790,50 +824,91 @@
                 document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 
-                // Update audio source
+                // Automatically update audio source to match selected input
                 state.audioSource = source;
                 document.getElementById('audioSource').textContent = source;
                 document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
             });
         });
 
-        // Display controls
-        document.querySelectorAll('[data-action]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const action = this.getAttribute('data-action');
-                
-                if (action === 'left-preview') {
-                    if (state.selectedSource) {
-                        document.getElementById('leftSource').textContent = `Preview: ${state.selectedSource}`;
-                    }
-                } else if (action === 'left-project') {
-                    if (state.selectedSource) {
-                        state.leftProjector = state.selectedSource;
-                        document.getElementById('leftSource').textContent = state.selectedSource;
-                        document.getElementById('leftStatus').textContent = 'Projecting';
-                        document.getElementById('leftScreen').classList.add('active');
-                    }
-                } else if (action === 'left-mute') {
-                    document.getElementById('leftSource').textContent = 'Blanked';
-                    document.getElementById('leftStatus').textContent = 'Muted';
-                    document.getElementById('leftScreen').classList.remove('active');
-                } else if (action === 'right-preview') {
-                    if (state.selectedSource) {
-                        document.getElementById('rightSource').textContent = `Preview: ${state.selectedSource}`;
-                    }
-                } else if (action === 'right-project') {
-                    if (state.selectedSource) {
-                        state.rightProjector = state.selectedSource;
-                        document.getElementById('rightSource').textContent = state.selectedSource;
-                        document.getElementById('rightStatus').textContent = 'Projecting';
-                        document.getElementById('rightScreen').classList.add('active');
-                    }
-                } else if (action === 'right-mute') {
-                    document.getElementById('rightSource').textContent = 'Blanked';
-                    document.getElementById('rightStatus').textContent = 'Muted';
-                    document.getElementById('rightScreen').classList.remove('active');
-                }
-            });
+        // Preview buttons
+        document.querySelector('[data-action="left-preview"]').addEventListener('click', function() {
+            if (state.selectedSource && state.isPowerOn) {
+                document.getElementById('leftSource').textContent = `Preview: ${state.selectedSource}`;
+                document.getElementById('leftStatus').textContent = 'Preview';
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please select an input source first.');
+            }
+        });
+
+        document.querySelector('[data-action="right-preview"]').addEventListener('click', function() {
+            if (state.selectedSource && state.isPowerOn) {
+                document.getElementById('rightSource').textContent = `Preview: ${state.selectedSource}`;
+                document.getElementById('rightStatus').textContent = 'Preview';
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please select an input source first.');
+            }
+        });
+
+        // Project buttons
+        document.querySelector('[data-action="left-project"]').addEventListener('click', function() {
+            if (state.selectedSource && state.isPowerOn) {
+                state.leftProjector = state.selectedSource;
+                document.getElementById('leftSource').textContent = state.selectedSource;
+                document.getElementById('leftStatus').textContent = 'Projecting';
+                document.getElementById('leftScreen').classList.add('active');
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please select an input source first.');
+            }
+        });
+
+        document.querySelector('[data-action="right-project"]').addEventListener('click', function() {
+            if (state.selectedSource && state.isPowerOn) {
+                state.rightProjector = state.selectedSource;
+                document.getElementById('rightSource').textContent = state.selectedSource;
+                document.getElementById('rightStatus').textContent = 'Projecting';
+                document.getElementById('rightScreen').classList.add('active');
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please select an input source first.');
+            }
+        });
+
+        // Blank buttons
+        document.querySelector('[data-action="left-mute"]').addEventListener('click', function() {
+            document.getElementById('leftSource').textContent = 'Blanked';
+            document.getElementById('leftStatus').textContent = 'Hidden';
+            document.getElementById('leftScreen').classList.remove('active');
+        });
+
+        document.querySelector('[data-action="right-mute"]').addEventListener('click', function() {
+            document.getElementById('rightSource').textContent = 'Blanked';
+            document.getElementById('rightStatus').textContent = 'Hidden';
+            document.getElementById('rightScreen').classList.remove('active');
+        });
+
+        // Camera presets
+        document.querySelector('[data-action="camera-preset-1"]').addEventListener('click', function() {
+            if (state.selectedSource === 'Camera Feed') {
+                alert('Camera moved to Preset 1 (Podium view)');
+            } else {
+                alert('Please select Camera input first.');
+            }
+        });
+
+        document.querySelector('[data-action="camera-preset-2"]').addEventListener('click', function() {
+            if (state.selectedSource === 'Camera Feed') {
+                alert('Camera moved to Preset 2 (Audience view)');
+            } else {
+                alert('Please select Camera input first.');
+            }
         });
 
         // Volume control
@@ -856,35 +931,82 @@
             state.isMuted = !state.isMuted;
             
             if (state.isMuted) {
+                state.previousVolume = volumeSlider.value;
                 volumeSlider.value = 0;
                 volumeLevel.textContent = '0%';
                 this.textContent = 'Unmute';
                 this.classList.add('muted');
             } else {
-                volumeSlider.value = state.volume || 50;
+                volumeSlider.value = state.previousVolume || 50;
                 volumeLevel.textContent = volumeSlider.value + '%';
                 this.textContent = 'Mute';
                 this.classList.remove('muted');
             }
         });
 
-        // Power controls
+        // Microphone control
+        const micSlider = document.getElementById('micSlider');
+        const micLevel = document.getElementById('micLevel');
+        const micMuteBtn = document.getElementById('micMuteBtn');
+        let isMicMuted = false;
+        let previousMicLevel = 50;
+
+        micSlider.addEventListener('input', function() {
+            micLevel.textContent = this.value + '%';
+            
+            if (this.value > 0 && isMicMuted) {
+                isMicMuted = false;
+                micMuteBtn.textContent = 'Mute';
+                micMuteBtn.classList.remove('muted');
+            }
+        });
+
+        micMuteBtn.addEventListener('click', function() {
+            isMicMuted = !isMicMuted;
+            
+            if (isMicMuted) {
+                previousMicLevel = micSlider.value;
+                micSlider.value = 0;
+                micLevel.textContent = '0%';
+                this.textContent = 'Unmute';
+                this.classList.add('muted');
+            } else {
+                micSlider.value = previousMicLevel;
+                micLevel.textContent = micSlider.value + '%';
+                this.textContent = 'Mute';
+                this.classList.remove('muted');
+            }
+        });
+
+        // Power controls with confirmation and warmup
         document.getElementById('powerOn').addEventListener('click', function() {
-            state.isPowerOn = true;
-            document.getElementById('leftStatus').textContent = 'Ready';
-            document.getElementById('rightStatus').textContent = 'Ready';
+            showConfirmation('Are you sure you want to turn ON the projectors?', function() {
+                // Show warmup message
+                alert('Projectors warming up... Please wait.');
+                
+                // Simulate warmup period (3 seconds)
+                setTimeout(function() {
+                    state.isPowerOn = true;
+                    document.getElementById('leftStatus').textContent = 'Ready';
+                    document.getElementById('rightStatus').textContent = 'Ready';
+                    alert('Projectors are ready!');
+                }, 3000);
+            });
         });
 
         document.getElementById('powerOff').addEventListener('click', function() {
-            state.isPowerOn = false;
-            state.leftProjector = null;
-            state.rightProjector = null;
-            document.getElementById('leftSource').textContent = 'No Input';
-            document.getElementById('rightSource').textContent = 'No Input';
-            document.getElementById('leftStatus').textContent = 'Off';
-            document.getElementById('rightStatus').textContent = 'Off';
-            document.getElementById('leftScreen').classList.remove('active');
-            document.getElementById('rightScreen').classList.remove('active');
+            showConfirmation('Are you sure you want to turn OFF the projectors?', function() {
+                state.isPowerOn = false;
+                state.leftProjector = null;
+                state.rightProjector = null;
+                document.getElementById('leftSource').textContent = 'No Input';
+                document.getElementById('rightSource').textContent = 'No Input';
+                document.getElementById('leftStatus').textContent = 'Off';
+                document.getElementById('rightStatus').textContent = 'Off';
+                document.getElementById('leftScreen').classList.remove('active');
+                document.getElementById('rightScreen').classList.remove('active');
+                alert('Projectors powered off.');
+            });
         });
     </script>
 </body>
