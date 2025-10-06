@@ -36,10 +36,9 @@
             gap: 15px;
         }
 
-        .room-name {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .fsu-logo {
+            height: 40px;
+            width: auto;
         }
 
         .header-right {
@@ -53,7 +52,7 @@
             opacity: 0.9;
         }
 
-        .settings-btn {
+        .help-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
@@ -67,9 +66,108 @@
             font-size: 14px;
         }
 
-        .settings-btn:hover {
+        .help-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .help-modal.show {
+            display: flex;
+        }
+
+        .help-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .help-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .help-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .help-content::-webkit-scrollbar-thumb {
+            background: #782F40;
+            border-radius: 4px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #782F40;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #5a2330;
+            transform: scale(1.1);
+        }
+
+        .help-content h2 {
+            color: #782F40;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .help-content h3 {
+            color: #782F40;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .help-content p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .help-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .help-content li {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .help-content strong {
+            color: #782F40;
         }
 
         .main-content {
@@ -420,14 +518,70 @@
 <body>
     <div class="header">
         <div class="header-left">
-            <div class="room-name">SANDBOX</div>
+            <img src="https://brand.fsu.edu/sites/g/files/upcbnu4656/files/brand/fsu-lockup/FSU_Lockup_2CLR_GAR_H_rgb.svg" alt="Florida State University" class="fsu-logo">
         </div>
         <div class="header-right">
             <div class="time" id="currentTime">Oct 5, 2025 12:00 PM</div>
-            <button class="settings-btn">
-                <span style="font-size: 20px;">⚙️</span>
-                Settings
+            <button class="help-btn" id="helpBtn">
+                <span style="font-size: 20px;">❓</span>
+                Help
             </button>
+        </div>
+    </div>
+
+    <div class="help-modal" id="helpModal">
+        <div class="help-content">
+            <button class="close-btn" id="closeBtn">×</button>
+            <h2>How to use the Crestron Touch Screen Panels</h2>
+            <p>The following information is a detailed explanation of how to use the Crestron touch panel interface in Technology-Enhanced Classrooms.</p>
+            
+            <h3>Main Control Page</h3>
+            <ul>
+                <li>From here, you will control the majority of the system.</li>
+                <li>The projector's on and off controls are located in the Power Control section.</li>
+                <li>The buttons to change input between the Doc Cam, Computer, BLURAY/DVD, Camera, and Laptop are in the Input Sources section.</li>
+                <li>To view the selected input in either preview panel, select an input source first.</li>
+                <li>To project a preview, select a technology and then the <strong>project</strong> button for the desired screen (left or right).</li>
+            </ul>
+
+            <h3>Projector On/Off Confirmation</h3>
+            <ul>
+                <li>A confirmation prompt displays upon powering the projectors on or off from the main panel.</li>
+            </ul>
+
+            <h3>Projector Warmup Screen</h3>
+            <ul>
+                <li>The screen displays as the projector warms up. No other inputs will be available for this short duration.</li>
+            </ul>
+
+            <h3>BLURAY/DVD Control Screen</h3>
+            <ul>
+                <li>Select the BLURAY input button to access the Blu-ray/DVD player.</li>
+                <li>The Blu-ray/DVD player video input automatically appears in the preview panel.</li>
+                <li>You will see the standard Blu-ray/DVD player controls.</li>
+                <li>If you need other functionality that requires a remote, please request one from the AV department.</li>
+            </ul>
+
+            <h3>Camera Control Screen</h3>
+            <ul>
+                <li>Select the CAMERA input button to access the camera.</li>
+                <li>The CAMERA has two preselected settings: <strong>PRESET 1</strong> and <strong>PRESET 2</strong>.</li>
+                <li>You may choose to preview or project the camera by selecting the CAMERA input, then selecting a preset, then pressing <strong>PROJECT</strong>.</li>
+            </ul>
+
+            <h3>Display Control</h3>
+            <ul>
+                <li>Use <strong>Preview</strong> to see an input before displaying it.</li>
+                <li>Use <strong>Project</strong> to send the input to the left or right projector.</li>
+                <li>Use <strong>Blank</strong> to temporarily hide a projector display.</li>
+            </ul>
+
+            <h3>Audio Control</h3>
+            <ul>
+                <li>The system automatically switches audio to match your selected input source.</li>
+                <li>Use the volume slider to adjust speaker volume.</li>
+                <li>Use the Mute button to quickly silence audio output.</li>
+            </ul>
         </div>
     </div>
 
@@ -590,6 +744,25 @@
             isMuted: false,
             isPowerOn: false
         };
+
+        // Help modal
+        const helpBtn = document.getElementById('helpBtn');
+        const helpModal = document.getElementById('helpModal');
+        const closeBtn = document.getElementById('closeBtn');
+
+        helpBtn.addEventListener('click', function() {
+            helpModal.classList.add('show');
+        });
+
+        closeBtn.addEventListener('click', function() {
+            helpModal.classList.remove('show');
+        });
+
+        helpModal.addEventListener('click', function(e) {
+            if (e.target === helpModal) {
+                helpModal.classList.remove('show');
+            }
+        });
 
         // Update time
         function updateTime() {
