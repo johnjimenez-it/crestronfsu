@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #782F40 0%, #CEB888 100%);
+            background: #782F40;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -303,7 +303,7 @@
         }
 
         .control-section.power {
-            grid-column: span 2;
+            grid-column: span 1;
         }
 
         .section-title {
@@ -413,8 +413,8 @@
             background: white;
             border: 3px solid #28a745;
             border-radius: 8px;
-            padding: 10px;
-            font-size: 11px;
+            padding: 8px;
+            font-size: 10px;
             font-weight: bold;
             color: #28a745;
             cursor: pointer;
@@ -422,7 +422,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .power-btn:hover {
@@ -632,27 +632,27 @@
                 <div class="button-grid triple">
                     <button class="control-btn" data-source="Desktop PC">
                         Desktop PC
-                        <span class="icon">🖥️</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424895392503566488/desktop_pc.png?ex=68e59cbe&is=68e44b3e&hm=0f8e22ab1e24236ae48036f8a3ccb2ddba5d032362fabeddfda20c4f86c8fc44&=&format=webp&quality=lossless&width=960&height=960" alt="desktop_pc" width="30" height="30" style="margin-left: 6px;"></span>
                     </button>
                     <button class="control-btn" data-source="Laptop">
                         Laptop
-                        <span class="icon">💻</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424919092539822151/laptop.png?ex=68e5b2d1&is=68e46151&hm=1e5f206640e675f0699a5028a1459fbb0813ddb4b682b20ef44735e09ae167c0&=&format=webp&quality=lossless&width=960&height=960" alt="laptop" width="30" height="30" style="margin-left: 6px;"></span>
                     </button>
                     <button class="control-btn" data-source="Document Camera">
                         Doc Cam
-                        <span class="icon">📹</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424919566206632066/doc_cam.png?ex=68e5b342&is=68e461c2&hm=66b45f38e288f4ca921ee4c04dc44b5abfc9631070496a4dcaeb97cb017826b5&=&format=webp&quality=lossless&width=960&height=960" alt="doc cam" width="30" height="30" style="margin-left: 6px;"></span>
                     </button>
                     <button class="control-btn" data-source="Wireless Stream">
                         Wireless
-                        <span class="icon">📡</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424921953436831927/wireless.png?ex=68e5b57b&is=68e463fb&hm=4f4462a4ae481ba897bab516c913e3c2fbc7f66c36c806fb924b9a1e5c9ef19e&=&format=webp&quality=lossless&width=960&height=960" alt="wireless" width="30" height="30" style="margin-left: 6px;"></span>
                     </button>
                     <button class="control-btn" data-source="Blu-ray Player">
                         Blu-ray
-                        <span class="icon">📀</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922705467150336/bluray.png?ex=68e5b62e&is=68e464ae&hm=0a69661fa1329786600b808e2219618ddf0c0724046aa369707a4437e5687163&=&format=webp&quality=lossless&width=960&height=960" alt="bluray" width="30" height="30" style="margin-left: 3px;"></span>
                     </button>
                     <button class="control-btn" data-source="Camera Feed">
                         Camera
-                        <span class="icon">🎥</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922698177581169/camera.png?ex=68e5b62d&is=68e464ad&hm=c70f57fe7902971511174498596dfc3e36b2d062e2724ab595862b5732d73eda&=&format=webp&quality=lossless&width=960&height=960" alt="camera" width="30" height="30" style="margin-left: 6px;"></span>
                     </button>
                 </div>
             </div>
@@ -672,8 +672,12 @@
                                 <span class="icon">▶️</span>
                             </button>
                             <button class="control-btn" data-action="left-mute">
-                                Blank
-                                <span class="icon">⬛</span>
+                                Hide
+                                <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922677323370507/hide.png?ex=68e5b628&is=68e464a8&hm=60616dcba2d3dfe2261ba2fc4498f9a311b3cc032c249ca9216b27ad112fc87e&=&format=webp&quality=lossless&width=960&height=960" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
+                            </button>
+                            <button class="control-btn" data-action="left-freeze">
+                                Freeze
+                                <span class="icon">❄️</span>
                             </button>
                         </div>
                     </div>
@@ -689,8 +693,12 @@
                                 <span class="icon">▶️</span>
                             </button>
                             <button class="control-btn" data-action="right-mute">
-                                Blank
-                                <span class="icon">⬛</span>
+                                Hide
+                                <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922677323370507/hide.png?ex=68e5b628&is=68e464a8&hm=60616dcba2d3dfe2261ba2fc4498f9a311b3cc032c249ca9216b27ad112fc87e&=&format=webp&quality=lossless&width=960&height=960" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
+                            </button>
+                            <button class="control-btn" data-action="right-freeze">
+                                Freeze
+                                <span class="icon">❄️</span>
                             </button>
                         </div>
                     </div>
@@ -702,11 +710,11 @@
                 <div class="button-grid single">
                     <button class="control-btn" data-action="camera-preset-1">
                         Preset 1
-                        <span class="icon">📍</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922669068980356/preset_1.png?ex=68e5b626&is=68e464a6&hm=ba9c3203c14631b7d42ee341e64aa7f54d7dac0865851fd87cbdce4ad88b0326&=&format=webp&quality=lossless&width=960&height=960" alt="preset1" width="30" height="30" style="margin-left: 1px;"></span>
                     </button>
                     <button class="control-btn" data-action="camera-preset-2">
                         Preset 2
-                        <span class="icon">📍</span>
+                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424924199247544331/camera_preset_2.png?ex=68e5b792&is=68e46612&hm=a750d49489a03beab1a73329594467386e5461d7f277fc84e3b98b1cb5c0d920&=&format=webp&quality=lossless&width=960&height=960" alt="preset2" width="30" height="30" style="margin-left: 1px;"></span>
                     </button>
                 </div>
             </div>
@@ -892,6 +900,29 @@
             document.getElementById('rightSource').textContent = 'Blanked';
             document.getElementById('rightStatus').textContent = 'Hidden';
             document.getElementById('rightScreen').classList.remove('active');
+        });
+
+        // Freeze buttons
+        document.querySelector('[data-action="left-freeze"]').addEventListener('click', function() {
+            if (state.leftProjector && state.isPowerOn) {
+                document.getElementById('leftStatus').textContent = 'Frozen';
+                alert('Left screen frozen. Current image will remain displayed.');
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please project something to the left screen first.');
+            }
+        });
+
+        document.querySelector('[data-action="right-freeze"]').addEventListener('click', function() {
+            if (state.rightProjector && state.isPowerOn) {
+                document.getElementById('rightStatus').textContent = 'Frozen';
+                alert('Right screen frozen. Current image will remain displayed.');
+            } else if (!state.isPowerOn) {
+                alert('Please power on the projectors first.');
+            } else {
+                alert('Please project something to the right screen first.');
+            }
         });
 
         // Camera presets
