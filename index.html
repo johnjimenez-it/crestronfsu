@@ -527,21 +527,86 @@
                 max-height: 350px;
             }
         }
+      
+        /* === Disabled Button Styles === */
+
+        /* General rule for all buttons */
+        button:disabled {
+            opacity: 0.6;             /* slightly faded */
+            cursor: not-allowed;      /* blocked cursor */
+            filter: grayscale(40%);   /* tone down icons if present */
+            transition: all 0.2s ease;
+        }
+
+        /* Projector control buttons */
+        .control-btn:disabled {
+            background: #ccc;         /* dull background */
+            color: #666;              /* muted text */
+            border: 1px solid #aaa;
+        }
+
+        /* Power buttons specifically */
+        #powerOn:disabled {
+            background: #28a74580;    /* faded green */
+            color: #f0f0f0;
+        }
+
+        #powerOff:disabled {
+            background: #dc354580;    /* faded red */
+            color: #f0f0f0;
+        }
+
+				/* Loading Screen preview */      
+        .preview-screen .loading-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(1px);z-index:2}
+        .preview-screen .spinner{width:46px;height:46px;border:4px solid #ffffff88;border-top-color:#fff;border-radius:50%;animation:spin .9s linear infinite}
+        .preview-screen.is-loading .loading-overlay{display:flex}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media (prefers-reduced-motion: reduce){.preview-screen .spinner{animation:none}}
+
+        /* Background images for preview screens */
+        .preview-screen.desktop   { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_p-72rMY56AoHEOV0AjO5qoJphB4Th2mUSA&s') center/cover no-repeat; }
+        .preview-screen.laptop    { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Urb8rFwF_mA2bM3wdPoyA_gqW5cK2rwLEA&s') center/cover no-repeat; }
+        .preview-screen.doccam    { background: url('https://i.ytimg.com/vi/BzjejJyTr8Y/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAHR6k_P57rdXjR55YIRVH7fsiJRw') center/cover no-repeat; }
+        .preview-screen.wireless  { background: url('https://cdsassets.apple.com/live/7WUAS350/images/macos/sequoia/macos-sequoia-ios-18-iphone-mirroring-window-with-controls.png') center/cover no-repeat; }
+        .preview-screen.bluray    { background: url('images/bluray.jpg') center/cover no-repeat; }
+        .preview-screen.camera    { background: url('images/camera.jpg') center/cover no-repeat; }
+      
+      .header-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+ 
+      img {
+        image-rendering: pixelated;
+
+.fsu-banner {
+    height: 120px;
+    width: auto;
+    max-width: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.header {
+    width: 100%;
+}
+      
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-left">
-            <img src="https://brand.fsu.edu/sites/g/files/upcbnu4656/files/brand/fsu-lockup/FSU_Lockup_2CLR_GLD_H_rgb.svg" alt="Florida State University" class="fsu-logo">
-        </div>
-        <div class="header-right">
-            <div class="time" id="currentTime">Oct 5, 2025 12:00 PM</div>
-            <button class="help-btn" id="helpBtn">
-                <span style="font-size: 20px;">❓</span>
-                Help
-            </button>
-        </div>
+    <div class="header-left">
+        <img src="https://i.ibb.co/YBM1JKvT/Final-try-FSU.png" alt="FSU Classroom Control" class="fsu-banner">
     </div>
+    <div class="header-right">
+        <div class="time" id="currentTime">Oct 5, 2025 12:00 PM</div>
+        <button class="help-btn" id="helpBtn">
+            <span style="font-size: 20px;">❓</span>
+            Help
+        </button>
+    </div>
+</div>
 
     <div class="help-modal" id="helpModal">
         <div class="help-content">
@@ -615,6 +680,10 @@
                         <div class="screen-status" id="leftStatus">Ready</div>
                     </div>
                     <div class="screen-source" id="leftSource">No Input</div>
+                    <!-- Loading spinner overlay (shown during warm-up) -->         
+                    <div class="loading-overlay" aria-hidden="true">
+                        <div class="spinner" role="status" aria-label="Warming up…"></div>
+                 	  </div>
                 </div>
                 <div class="preview-screen" id="rightScreen">
                     <div class="screen-header">
@@ -622,6 +691,10 @@
                         <div class="screen-status" id="rightStatus">Ready</div>
                     </div>
                     <div class="screen-source" id="rightSource">No Input</div>
+                    <!-- Loading spinner overlay (shown during warm-up) -->         
+                    <div class="loading-overlay" aria-hidden="true">
+                        <div class="spinner" role="status" aria-label="Warming up…"></div>
+                 	  </div>
                 </div>
             </div>
         </div>
@@ -781,6 +854,56 @@
             isPowerOn: false
         };
 
+        /* === Tiny helpers (must be defined before listeners use them) === */
+        function setPreviewLoading(screenEl, isLoading) {
+            if (!screenEl) return;
+            screenEl.classList.toggle('is-loading', isLoading);
+            screenEl.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+        }
+
+        function disableDisplayControls(disabled) {
+            document.querySelectorAll(
+                '[data-action="left-preview"],[data-action="left-project"],[data-action="left-mute"],[data-action="left-freeze"],' +
+                '[data-action="right-preview"],[data-action="right-project"],[data-action="right-mute"],[data-action="right-freeze"]'
+            ).forEach(btn => btn.disabled = disabled);
+        }
+
+      
+      	//Checks status of power
+        function updatePowerUI() {
+            const onBtn  = document.getElementById('powerOn');
+            const offBtn = document.getElementById('powerOff');
+
+            if (state.isPowerOn) {
+                onBtn.disabled  = true;   // can’t press ON again
+                offBtn.disabled = false;  // can power OFF
+                disableDisplayControls(false); // preview/project/blank enabled
+            } else {
+                onBtn.disabled  = false;  // can power ON
+                offBtn.disabled = true;   // can’t press OFF if already off
+                disableDisplayControls(true);  // lock display controls while off
+            }
+        }
+
+        // Map your source labels -> CSS class names
+        const SOURCE_CLASS = {
+            'Desktop PC':     'desktop',
+            'Laptop':         'laptop',
+            'Document Camera':'doccam',
+            'Wireless Stream':'wireless',
+            'Camera Feed':    'camera'
+        };
+
+        // Utility: apply the correct background class to a screen
+        function applySourceBg(screenEl, sourceLabel) {
+            if (!screenEl) return;
+            // remove any previous source classes
+            screenEl.classList.remove(...Object.values(SOURCE_CLASS));
+            // add new class if we have a mapping
+            const cls = SOURCE_CLASS[sourceLabel];
+            if (cls) screenEl.classList.add(cls);
+        }
+      
         function updateAudioSourceLabels(source) {
             document.getElementById('audioSource').textContent = source;
             document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
@@ -856,10 +979,11 @@
         });
 
         // Preview buttons
-        document.querySelector('[data-action="left-preview"]').addEventListener('click', function() {
+        document.querySelector('[data-action="left-preview"]').addEventListener('click', function () {
             if (state.selectedSource && state.isPowerOn) {
-                document.getElementById('leftSource').textContent = `Preview: ${state.selectedSource}`;
-                document.getElementById('leftStatus').textContent = 'Preview';
+                document.getElementById('leftSource').textContent  = `Preview: ${state.selectedSource}`;
+                document.getElementById('leftStatus').textContent  = 'Preview';
+                applySourceBg(document.getElementById('leftScreen'), state.selectedSource);
             } else if (!state.isPowerOn) {
                 alert('Please power on the projectors first.');
             } else {
@@ -867,10 +991,11 @@
             }
         });
 
-        document.querySelector('[data-action="right-preview"]').addEventListener('click', function() {
+        document.querySelector('[data-action="right-preview"]').addEventListener('click', function () {
             if (state.selectedSource && state.isPowerOn) {
                 document.getElementById('rightSource').textContent = `Preview: ${state.selectedSource}`;
                 document.getElementById('rightStatus').textContent = 'Preview';
+                applySourceBg(document.getElementById('rightScreen'), state.selectedSource);
             } else if (!state.isPowerOn) {
                 alert('Please power on the projectors first.');
             } else {
@@ -879,12 +1004,14 @@
         });
 
         // Project buttons
-        document.querySelector('[data-action="left-project"]').addEventListener('click', function() {
+        document.querySelector('[data-action="left-project"]').addEventListener('click', function () {
             if (state.selectedSource && state.isPowerOn) {
                 state.leftProjector = state.selectedSource;
                 document.getElementById('leftSource').textContent = state.selectedSource;
                 document.getElementById('leftStatus').textContent = 'Projecting';
-                document.getElementById('leftScreen').classList.add('active');
+                const leftScreen = document.getElementById('leftScreen');
+                leftScreen.classList.add('active');
+                applySourceBg(leftScreen, state.selectedSource);
             } else if (!state.isPowerOn) {
                 alert('Please power on the projectors first.');
             } else {
@@ -892,12 +1019,14 @@
             }
         });
 
-        document.querySelector('[data-action="right-project"]').addEventListener('click', function() {
+        document.querySelector('[data-action="right-project"]').addEventListener('click', function () {
             if (state.selectedSource && state.isPowerOn) {
                 state.rightProjector = state.selectedSource;
                 document.getElementById('rightSource').textContent = state.selectedSource;
                 document.getElementById('rightStatus').textContent = 'Projecting';
-                document.getElementById('rightScreen').classList.add('active');
+                const rightScreen = document.getElementById('rightScreen');
+                rightScreen.classList.add('active');
+                applySourceBg(rightScreen, state.selectedSource);
             } else if (!state.isPowerOn) {
                 alert('Please power on the projectors first.');
             } else {
@@ -905,17 +1034,19 @@
             }
         });
 
-        // Blank buttons
+// Blank buttons
         document.querySelector('[data-action="left-mute"]').addEventListener('click', function() {
+            const leftScreen = document.getElementById('leftScreen');
             document.getElementById('leftSource').textContent = 'Blanked';
             document.getElementById('leftStatus').textContent = 'Hidden';
-            document.getElementById('leftScreen').classList.remove('active');
+            leftScreen.classList.remove('active', 'desktop', 'laptop', 'doccam', 'wireless', 'bluray', 'camera');
         });
 
         document.querySelector('[data-action="right-mute"]').addEventListener('click', function() {
+            const rightScreen = document.getElementById('rightScreen');
             document.getElementById('rightSource').textContent = 'Blanked';
             document.getElementById('rightStatus').textContent = 'Hidden';
-            document.getElementById('rightScreen').classList.remove('active');
+            rightScreen.classList.remove('active', 'desktop', 'laptop', 'doccam', 'wireless', 'bluray', 'camera');
         });
 
         // Freeze buttons
@@ -1025,34 +1156,59 @@
             }
         });
 
-        // Power controls with confirmation and warmup
-        document.getElementById('powerOn').addEventListener('click', function() {
-            showConfirmation('Are you sure you want to turn ON the projectors?', function() {
-                // Show warmup message
-                alert('Projectors warming up... Please wait.');
-                
-                // Simulate warmup period (3 seconds)
-                setTimeout(function() {
-                    state.isPowerOn = true;
-                    document.getElementById('leftStatus').textContent = 'Ready';
-                    document.getElementById('rightStatus').textContent = 'Ready';
-                    alert('Projectors are ready!');
+        // POWER ON
+        document.getElementById('powerOn').addEventListener('click', function () {
+            if (state.isPowerOn) return;      // already ON -> ignore
+            // optimistically disable ON to prevent double-click spamming
+            this.disabled = true;
+
+            showConfirmation('Turn ON projectors?', () => {
+                const leftScreen  = document.getElementById('leftScreen');
+                const rightScreen = document.getElementById('rightScreen');
+                const leftStatus  = document.getElementById('leftStatus');
+                const rightStatus = document.getElementById('rightStatus');
+
+                // warming up phase
+                setPreviewLoading(leftScreen,  true);
+                setPreviewLoading(rightScreen, true);
+                leftStatus.textContent  = 'Warming up…';
+                rightStatus.textContent = 'Warming up…';
+                disableDisplayControls(true);
+
+                setTimeout(() => {
+                    state.isPowerOn = true;       // now ON
+                    setPreviewLoading(leftScreen,  false);
+                    setPreviewLoading(rightScreen, false);
+                    leftStatus.textContent  = 'Ready';
+                    rightStatus.textContent = 'Ready';
+                    updatePowerUI();              // lock/unlock buttons accordingly
                 }, 3000);
+            }, () => {
+                // user canceled -> restore previous enabled state
+                updatePowerUI();
             });
         });
 
-        document.getElementById('powerOff').addEventListener('click', function() {
-            showConfirmation('Are you sure you want to turn OFF the projectors?', function() {
+        // POWER OFF
+        document.getElementById('powerOff').addEventListener('click', function () {
+            if (!state.isPowerOn) return;     // already OFF -> ignore
+
+            showConfirmation('Turn OFF projectors?', () => {
                 state.isPowerOn = false;
-                state.leftProjector = null;
-                state.rightProjector = null;
-                document.getElementById('leftSource').textContent = 'No Input';
+
+                // reset UI
+                document.getElementById('leftSource').textContent  = 'No Input';
                 document.getElementById('rightSource').textContent = 'No Input';
-                document.getElementById('leftStatus').textContent = 'Off';
+                document.getElementById('leftStatus').textContent  = 'Off';
                 document.getElementById('rightStatus').textContent = 'Off';
-                document.getElementById('leftScreen').classList.remove('active');
-                document.getElementById('rightScreen').classList.remove('active');
-                alert('Projectors powered off.');
+                document.getElementById('leftScreen').classList.remove('active','is-loading');
+                document.getElementById('rightScreen').classList.remove('active','is-loading');
+
+                // also clear any “projecting” state you track
+                state.leftProjector  = null;
+                state.rightProjector = null;
+
+                updatePowerUI();                 // disables OFF, enables ON, locks controls
             });
         });
     </script>
