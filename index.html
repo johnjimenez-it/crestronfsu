@@ -768,16 +768,23 @@
     </div>
 
     <script>
+        const DEFAULT_AUDIO_SOURCE = 'Desktop PC';
+
         // State management
         let state = {
             selectedSource: null,
             leftProjector: null,
             rightProjector: null,
-            audioSource: 'Desktop PC',
+            audioSource: DEFAULT_AUDIO_SOURCE,
             volume: 50,
             isMuted: false,
             isPowerOn: false
         };
+
+        function updateAudioSourceLabels(source) {
+            document.getElementById('audioSource').textContent = source;
+            document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
+        }
 
         // Help modal
         const helpBtn = document.getElementById('helpBtn');
@@ -826,16 +833,25 @@
         document.querySelectorAll('[data-source]').forEach(btn => {
             btn.addEventListener('click', function() {
                 const source = this.getAttribute('data-source');
+                const isActive = this.classList.contains('active');
+
+                if (isActive) {
+                    this.classList.remove('active');
+                    state.selectedSource = null;
+                    state.audioSource = DEFAULT_AUDIO_SOURCE;
+                    updateAudioSourceLabels(state.audioSource);
+                    return;
+                }
+
                 state.selectedSource = source;
-                
+
                 // Update button states
                 document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                
+
                 // Automatically update audio source to match selected input
                 state.audioSource = source;
-                document.getElementById('audioSource').textContent = source;
-                document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
+                updateAudioSourceLabels(state.audioSource);
             });
         });
 
