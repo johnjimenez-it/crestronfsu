@@ -391,6 +391,14 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+      
+         .preview-label.light-controls {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px; 
+            text-align: center;
+        }
 
         .audio-indicator {
             background: rgba(40, 167, 69, 0.2);
@@ -854,15 +862,17 @@
         .preview-screen.doccam    { background: url('https://i.ytimg.com/vi/BzjejJyTr8Y/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAHR6k_P57rdXjR55YIRVH7fsiJRw') center/cover no-repeat; }
         .preview-screen.wireless  { background: url('https://cdsassets.apple.com/live/7WUAS350/images/macos/sequoia/macos-sequoia-ios-18-iphone-mirroring-window-with-controls.png') center/cover no-repeat; }
         .preview-screen.bluray    { background: url('images/bluray.jpg') center/cover no-repeat; }
-        .preview-screen.camera    { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagVR4Rd_Sjt3sUaFyFWpqAM9wlZzVnHpyeA&s') center/cover no-repeat; }
-    
+        .preview-screen.camera    { background: url('images/camera.jpg') center/cover no-repeat; }
+     
       img {
       	image-rendering: pixelated;
       }
       
-      .header-left {
+    .header-left {
     flex: 1;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .fsu-banner {
@@ -871,10 +881,8 @@
     max-width: none;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    margin-left: auto;
-    margin-right: 100px; }
-      
-    
+    margin-left: 190px; 
+}
   /* ====== ICON COLOR TOGGLE (MAROON ⇄ WHITE) ====== */
 
 /* Ensures all icons transition smoothly */
@@ -938,6 +946,7 @@
         .signin-btn:hover {
             background: rgba(255,255,255,0.2);
             border-color: rgba(255,255,255,0.5);
+}
         }
 
         /* Small QR panel pinned at the very top-left */
@@ -1094,7 +1103,7 @@
         <div class="preview-section">
             <div class="preview-header">
                 <div class="preview-label">Display Preview</div>
-              <div class="preview-label">Light Controls</div>
+              <div class="preview-label light-controls">Light Controls</div>
                 <div class="audio-indicator">
                     <span>🔊</span>
                     <span id="audioSource">Desktop PC</span>
