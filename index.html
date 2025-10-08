@@ -11,13 +11,40 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+       body {
+   		 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   		 background: #782F40 url('https://i.ibb.co/Gfd1jGk9/FSU-background.jpg') center/cover no-repeat fixed;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+    	overflow: hidden;
+}
+      
+        .lights-btn.active {
             background: #782F40;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            color: white;
+        }
+
+        .lights-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;       
+        width: 103%;
+        height: 20%;    
+        padding: 30px ;   
+        font-size: 14px;   
+        border-radius: 8px;
+        border: 1px solid #782F40;
+        background: white;
+        color: #782F40;
+        cursor: pointer;
+        transition: all 0.2s;
+        }
+
+        .lights-btn:hover {
+        background: #782F40;
+        color: white;
         }
 
         .header {
@@ -188,7 +215,7 @@
             gap: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
             flex: 0 0 auto;
-            height: 280px;
+            height: 700px;
         }
 
         .preview-header {
@@ -220,9 +247,11 @@
 
         .preview-container {
             flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            display: flex;
+          	align-items: stretch;
+          	justify-content: center;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
         }
 
         .preview-screen {
@@ -230,6 +259,7 @@
             border-radius: 10px;
             border: 2px solid rgba(255, 255, 255, 0.1);
             display: flex;
+          	flex: 1;
             flex-direction: column;
             padding: 15px;
             position: relative;
@@ -528,6 +558,101 @@
             }
         }
       
+        /* Timer sits in one grid cell, like other white boxes */
+        .control-section.timer {
+            grid-column: span 1;
+            align-self: start;
+        }
+
+        /* Small heading for the inline Annotation area */
+        .subsection-title {
+            margin-top: 8px;
+            margin-bottom: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #782F40;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Countdown label, compact */
+        .timer-display {
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: #782F40;
+        }
+
+        /* Two buttons side-by-side, tighter spacing */
+        .button-grid.compact-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        /* Small control button variant to save space */
+        .control-btn.control-sm {
+            padding: 6px 8px;
+            font-size: 10px;
+            line-height: 1.1;
+        }
+
+        /* Slightly reduce default control paddings across the board (optional) */
+        .control-section {
+            padding: 10px;                /* was 12px */
+        }
+        .button-grid {
+            gap: 6px;                     /* was often larger */
+        }
+
+        /* Keep canvases on the previews; draw only when enabled */
+        .preview-screen { position: relative; }
+        .draw-canvas {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            pointer-events: none; touch-action: none;
+        }
+        .draw-enabled .draw-canvas { pointer-events: auto; cursor: crosshair; }
+
+        /* Timer finished flash (kept) */
+        @keyframes timer-flash {
+            0% { background-color: rgba(255,255,0,0.00); }
+            25% { background-color: rgba(255,255,0,0.25); }
+            50% { background-color: rgba(255,255,0,0.45); }
+            75% { background-color: rgba(255,255,0,0.25); }
+            100% { background-color: rgba(255,255,0,0.00); }
+        }
+        .timer-flash { animation: timer-flash 1s ease-in-out 5; }
+
+      
+        /* Ensure the preview is a positioning context */
+        .preview-screen {
+            position: relative;          /* if not already set */
+            overflow: hidden;            /* keeps overlay inside rounded corners */
+        }
+      
+        /* Ensure the preview is a positioning context */
+        .preview-screen {
+            position: relative;          /* if not already set */
+            overflow: hidden;            /* keeps overlay inside rounded corners */
+        }
+
+        /* Visual "Frozen" overlay */
+        .preview-screen.frozen::after {
+            content: 'FROZEN';
+            position: absolute;
+            inset: 0;                    /* top:0 right:0 bottom:0 left:0 */
+            display: grid;
+            place-items: center;
+            background: rgba(0, 0, 0, 0.35);
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,.6);
+            pointer-events: none;        /* don’t block clicks on controls */
+        }
+      
         /* === Disabled Button Styles === */
 
         /* General rule for all buttons */
@@ -570,35 +695,157 @@
         .preview-screen.wireless  { background: url('https://cdsassets.apple.com/live/7WUAS350/images/macos/sequoia/macos-sequoia-ios-18-iphone-mirroring-window-with-controls.png') center/cover no-repeat; }
         .preview-screen.bluray    { background: url('images/bluray.jpg') center/cover no-repeat; }
         .preview-screen.camera    { background: url('images/camera.jpg') center/cover no-repeat; }
+    
+      img {
+      	image-rendering: pixelated;
+      }
       
       .header-left {
     flex: 1;
     display: flex;
-    justify-content: center;
 }
- 
-    img {
-    	image-rendering: pixelated;
-     
 
 .fsu-banner {
-    height: 120px;
+    height: 80px;
     width: auto;
     max-width: none;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin-left: auto;
+    margin-right: 100px; }
+      
+    
+  /* ====== ICON COLOR TOGGLE (MAROON ⇄ WHITE) ====== */
+
+/* Ensures all icons transition smoothly */
+.control-btn img,
+.mute-btn img,
+.lights-btn img {
+    transition: filter 0.25s ease-in-out;
+    filter: brightness(0) saturate(100%) invert(17%) sepia(34%) saturate(1563%) hue-rotate(308deg) brightness(96%) contrast(95%);
+    /* converts PNG to maroon tone (#782F40) */
 }
 
-.header {
-    width: 100%;
+/* When button is hovered */
+.control-btn:hover img,
+.power-btn:hover img,
+.mute-btn:hover img,
+.lights-btn:hover img {
+    filter: brightness(0) invert(1);
+    /* makes it pure white */
 }
-      
+
+/* When button is active / toggled */
+.control-btn.active img,
+.power-btn:active img,
+.mute-btn.active img,
+.lights-btn.active img {
+    filter: brightness(0) invert(1);
+}
+
+/* For power buttons (on/off), enforce consistent look */
+.power-btn img {
+    transition: filter 0.25s ease;
+}
+.power-btn:hover img {
+    filter: brightness(0) invert(1);
+}
+
+/* Optional: smoother transition on hover */
+.control-btn:hover,
+.lights-btn:hover,
+.power-btn:hover {
+    transition: all 0.2s ease, filter 0.2s ease;
+}
+
+        /* Tighten the control panel grid spacing a bit */
+        .control-panel { gap: 10px; }           /* if it was 12–16px */
+
+        /* Make the preview shorter so controls fit below on typical laptops */
+        .preview-section { height: 560px; }     /* was ~700px; adjust as needed */
+
+                 /* Sign-in button matches your header style */
+        .signin-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .signin-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* Small QR panel pinned at the very top-left */
+        .qr-panel {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 260px;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            border: 1px solid rgba(0,0,0,0.08);
+            display: none;
+            z-index: 2000;
+        }
+        .qr-panel.show { display: block; }
+
+        .qr-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 20px;
+            color: #782F40;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .qr-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            line-height: 1;
+            color: #782F40;
+            cursor: pointer;
+        }
+        .qr-body {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 6px;
+            background:
+                linear-gradient(45deg,#ddd 25%,transparent 25%) 0 0/20px 20px,
+                linear-gradient(-45deg,#ddd 25%,transparent 25%) 0 0/20px 20px,
+                linear-gradient(45deg,transparent 75%,#ddd 75%) 0 0/20px 20px,
+                linear-gradient(-45deg,transparent 75%,#ddd 75%) 0 0/20px 20px;
+            display: grid;
+            place-items: center;
+            color: #666;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+  
     </style>
 </head>
 <body>
     <div class="header">
     <div class="header-left">
-        <img src="https://i.ibb.co/YBM1JKvT/Final-try-FSU.png" alt="FSU Classroom Control" class="fsu-banner">
+        <button class="signin-btn" id="signInBtn" aria-haspopup="dialog" aria-controls="qrPanel">
+            Sign in
+        </button>
+        <img src="https://i.ibb.co/k6ydX1R8/Untitled-design.png" alt="FSU Classroom Control" class="fsu-banner">
     </div>
     <div class="header-right">
         <div class="time" id="currentTime">Oct 5, 2025 12:00 PM</div>
@@ -607,7 +854,18 @@
             Help
         </button>
     </div>
-</div>
+</div> 
+  
+     <div id="qrPanel" class="qr-panel" role="dialog" aria-modal="false" aria-hidden="true">
+        <div class="qr-header">
+            <span>Scan to sign in</span>
+            <button class="qr-close" id="qrCloseBtn" aria-label="Close">×</button>
+        </div>
+        <div class="qr-body">
+            <!-- Placeholder QR square -->
+            <div class="qr-placeholder">QR</div>
+        </div>
+    </div>
 
     <div class="help-modal" id="helpModal">
         <div class="help-content">
@@ -669,6 +927,7 @@
         <div class="preview-section">
             <div class="preview-header">
                 <div class="preview-label">Display Preview</div>
+              <div class="preview-label">Light Controls</div>
                 <div class="audio-indicator">
                     <span>🔊</span>
                     <span id="audioSource">Desktop PC</span>
@@ -686,6 +945,14 @@
                         <div class="spinner" role="status" aria-label="Warming up…"></div>
                  	  </div>
                 </div>
+                <div class="lightcontrols">
+                    <button class="lights-btn">ALL ON</button>
+                    <button class="lights-btn">LECTURE</button>
+                    <button class="lights-btn">VIDEO 1</button>
+                    <button class="lights-btn">VIDEO 2</button>
+                    <button class="lights-btn">ALL OFF</button>
+                </div>
+
                 <div class="preview-screen" id="rightScreen">
                     <div class="screen-header">
                         <div class="screen-title">Right Projector</div>
@@ -706,27 +973,27 @@
                 <div class="button-grid triple">
                     <button class="control-btn" data-source="Desktop PC">
                         Desktop PC
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424895392503566488/desktop_pc.png?ex=68e59cbe&is=68e44b3e&hm=0f8e22ab1e24236ae48036f8a3ccb2ddba5d032362fabeddfda20c4f86c8fc44&=&format=webp&quality=lossless&width=960&height=960" alt="desktop_pc" width="30" height="30" style="margin-left: 6px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/tnJY5YnP/desktop-pc.png" alt="desktop_pc" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="control-btn" data-source="Laptop">
                         Laptop
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424919092539822151/laptop.png?ex=68e5b2d1&is=68e46151&hm=1e5f206640e675f0699a5028a1459fbb0813ddb4b682b20ef44735e09ae167c0&=&format=webp&quality=lossless&width=960&height=960" alt="laptop" width="30" height="30" style="margin-left: 6px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/dk4hr83j/laptop.png" alt="laptop" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="control-btn" data-source="Document Camera">
                         Doc Cam
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424919566206632066/doc_cam.png?ex=68e5b342&is=68e461c2&hm=66b45f38e288f4ca921ee4c04dc44b5abfc9631070496a4dcaeb97cb017826b5&=&format=webp&quality=lossless&width=960&height=960" alt="doc cam" width="30" height="30" style="margin-left: 6px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/DJBSLq0Q/doc-cam.png" alt="doc cam" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="control-btn" data-source="Wireless Stream">
                         Wireless
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424921953436831927/wireless.png?ex=68e5b57b&is=68e463fb&hm=4f4462a4ae481ba897bab516c913e3c2fbc7f66c36c806fb924b9a1e5c9ef19e&=&format=webp&quality=lossless&width=960&height=960" alt="wireless" width="30" height="30" style="margin-left: 6px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/CBmRkj5G/wireless.png" alt="wireless" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="control-btn" data-source="Blu-ray Player">
                         Blu-ray
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922705467150336/bluray.png?ex=68e5b62e&is=68e464ae&hm=0a69661fa1329786600b808e2219618ddf0c0724046aa369707a4437e5687163&=&format=webp&quality=lossless&width=960&height=960" alt="bluray" width="30" height="30" style="margin-left: 3px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/BLMjHxbb/bluray.png" alt="bluray" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="control-btn" data-source="Camera Feed">
                         Camera
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922698177581169/camera.png?ex=68e5b62d&is=68e464ad&hm=c70f57fe7902971511174498596dfc3e36b2d062e2724ab595862b5732d73eda&=&format=webp&quality=lossless&width=960&height=960" alt="camera" width="30" height="30" style="margin-left: 6px;"></span>
+                        <span class="icon"><img src="https://i.postimg.cc/xJtXMK8c/camera.png" alt="camera" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                 </div>
             </div>
@@ -739,19 +1006,19 @@
                         <div class="display-group">
                             <button class="control-btn" data-action="left-preview">
                                 Preview
-                                <span class="icon">👁️</span>
+                                <span class="icon"><span class="icon"><img src="https://i.postimg.cc/Jhxh7QJd/preview.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>️</span>
                             </button>
                             <button class="control-btn" data-action="left-project">
                                 Project
-                                <span class="icon">▶️</span>
+                                <span class="icon"><span class="icon"><img src="https://i.postimg.cc/fRgHGGqk/r-LK736t9-XA.png" alt="freeze" width="30" height="30"></span></span>
                             </button>
                             <button class="control-btn" data-action="left-mute">
                                 Hide
-                                <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922677323370507/hide.png?ex=68e5b628&is=68e464a8&hm=60616dcba2d3dfe2261ba2fc4498f9a311b3cc032c249ca9216b27ad112fc87e&=&format=webp&quality=lossless&width=960&height=960" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
+                                <span class="icon"><img src="https://i.postimg.cc/ygvDcFxS/hide.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
                             </button>
                             <button class="control-btn" data-action="left-freeze">
                                 Freeze
-                                <span class="icon">❄️</span>
+                                <span class="icon"><img src="https://i.postimg.cc/Pp2CYmJv/freeze.png" alt="freeze" width="30" height="30"></span>
                             </button>
                         </div>
                     </div>
@@ -760,19 +1027,19 @@
                         <div class="display-group">
                             <button class="control-btn" data-action="right-preview">
                                 Preview
-                                <span class="icon">👁️</span>
+                                <span class="icon"><span class="icon"><img src="https://i.postimg.cc/Jhxh7QJd/preview.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>️</span>
                             </button>
                             <button class="control-btn" data-action="right-project">
                                 Project
-                                <span class="icon">▶️</span>
+                                <span class="icon"><span class="icon"><img src="https://i.postimg.cc/fRgHGGqk/r-LK736t9-XA.png" alt="freeze" width="30" height="30"></span></span>
                             </button>
                             <button class="control-btn" data-action="right-mute">
                                 Hide
-                                <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922677323370507/hide.png?ex=68e5b628&is=68e464a8&hm=60616dcba2d3dfe2261ba2fc4498f9a311b3cc032c249ca9216b27ad112fc87e&=&format=webp&quality=lossless&width=960&height=960" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
+                                <span class="icon"><img src="https://i.postimg.cc/ygvDcFxS/hide.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
                             </button>
                             <button class="control-btn" data-action="right-freeze">
                                 Freeze
-                                <span class="icon">❄️</span>
+                                <span class="icon"><img src="https://i.postimg.cc/Pp2CYmJv/freeze.png" alt="freeze" width="30" height="30"></span>
                             </button>
                         </div>
                     </div>
@@ -783,12 +1050,12 @@
                 <div class="section-title">Camera</div>
                 <div class="button-grid single">
                     <button class="control-btn" data-action="camera-preset-1">
-                        Preset 1
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424922669068980356/preset_1.png?ex=68e5b626&is=68e464a6&hm=ba9c3203c14631b7d42ee341e64aa7f54d7dac0865851fd87cbdce4ad88b0326&=&format=webp&quality=lossless&width=960&height=960" alt="preset1" width="30" height="30" style="margin-left: 1px;"></span>
+                        Preset 1 - Podium View
+                        <span class="icon"><img src="https://i.postimg.cc/MMdnVyHQ/preset-1.png" alt="preset1" width="30" height="30" style="margin-left: 1px;"></span>
                     </button>
                     <button class="control-btn" data-action="camera-preset-2">
-                        Preset 2
-                        <span class="icon"><img src="https://media.discordapp.net/attachments/1398867678273212497/1424924199247544331/camera_preset_2.png?ex=68e5b792&is=68e46612&hm=a750d49489a03beab1a73329594467386e5461d7f277fc84e3b98b1cb5c0d920&=&format=webp&quality=lossless&width=960&height=960" alt="preset2" width="30" height="30" style="margin-left: 1px;"></span>
+                        Preset 2 - Audience View
+                        <span class="icon"><img src="https://i.postimg.cc/vg34fWTb/camera-preset-2.png" alt="preset2" width="30" height="30" style="margin-left: 1px;"></span>
                     </button>
                 </div>
             </div>
@@ -798,7 +1065,7 @@
                 <div class="button-grid single">
                     <button class="control-btn active" data-action="listen">
                         <span id="listenToLabel">Listening: Desktop PC</span>
-                        <span class="icon">🎧</span>
+                        <span class="icon"><img src="https://i.postimg.cc/BLMjHxbF/audio-source.png" alt="listening" width="30" height="30"></span>
                     </button>
                 </div>
             </div>
@@ -808,7 +1075,7 @@
                 <div>
                     <div class="control-label">Speaker Volume</div>
                     <div class="volume-control">
-                        <span style="font-size: 16px;">🔊</span>
+                        <span style="font-size: 16px;"><span class="icon"><img src="https://i.postimg.cc/N9pKm1FT/volume.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span></span>
                         <input type="range" class="volume-slider" min="0" max="100" value="50" id="volumeSlider">
                         <span id="volumeLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
                         <button class="mute-btn" id="muteBtn">Mute</button>
@@ -817,7 +1084,7 @@
                 <div style="margin-top: 8px;">
                     <div class="control-label">Microphone Level</div>
                     <div class="mic-control">
-                        <span style="font-size: 16px;">🎤</span>
+                        <span style="font-size: 16px;"><span class="icon"><img src="https://i.postimg.cc/BLMjHxb2/microphone.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span></span>
                         <input type="range" class="volume-slider" min="0" max="100" value="50" id="micSlider">
                         <span id="micLevel" style="font-size: 10px; font-weight: bold; color: #782F40; min-width: 32px;">50%</span>
                         <button class="mute-btn" id="micMuteBtn">Mute</button>
@@ -825,22 +1092,40 @@
                 </div>
             </div>
 
+            <div class="control-section timer">
+                <div class="section-title">Timer</div>
+
+                <div class="button-grid single">
+                    <button class="control-btn" data-action="timer" id="timerBtn">
+                        <span class="icon" aria-hidden="true" style="font-size:18px;line-height:1;">⏱️</span>
+                        Start Timer
+                    </button>
+                </div>
+
+                <div id="timerDisplay" class="timer-display">00:00</div>
+
+                <!-- Annotation lives inside the Timer box -->
+                <div class="subsection-title">Annotation</div>
+            <div class="button-grid compact-two">
+                <button class="control-btn control-sm" data-action="toggle-draw" id="drawToggleBtn">Draw Mode</button>
+                <button class="control-btn control-sm" data-action="clear-annotations" id="clearAnnotationsBtn">Clear</button>
+            </div>
+            </div>
+          
             <div class="control-section power">
-                <div class="section-title">Power Control</div>
+                <div class="section-title">Projector Controls</div>
                 <div class="power-section">
                     <button class="power-btn" id="powerOn">
-                        <span>⚡</span>
-                        Power On
+                        <span class="icon"><img src="https://i.postimg.cc/rD7xp6Ys/power-button-on.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                     <button class="power-btn off" id="powerOff">
-                        <span>🔌</span>
-                        Power Off
+                        <span class="icon"><img src="https://i.postimg.cc/75j0LvQH/power-button-off.png" alt="hide" width="30" height="30" style="margin-left: 0px;"></span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
+  
     <script>
         const DEFAULT_AUDIO_SOURCE = 'Desktop PC';
 
@@ -910,6 +1195,33 @@
             document.getElementById('listenToLabel').textContent = `Listening: ${source}`;
         }
 
+        //Frozen class helpers
+        function setFrozen(screenId, frozen) {
+            const el = document.getElementById(screenId);       // 'leftScreen' or 'rightScreen'
+            const statusEl = document.getElementById(
+                screenId === 'leftScreen' ? 'leftStatus' : 'rightStatus'
+            );
+            el.classList.toggle('frozen', frozen);
+            if (statusEl) statusEl.textContent = frozen ? 'Frozen' : 'Projecting';
+        }
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric', 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            };
+            document.getElementById('currentTime').textContent = now.toLocaleString('en-US', options);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+      
         // Help modal
         const helpBtn = document.getElementById('helpBtn');
         const helpModal = document.getElementById('helpModal');
@@ -929,51 +1241,62 @@
             }
         });
 
-        // Confirmation modal
-        function showConfirmation(message, onConfirm) {
+        // A. Define showConfirmation with onCancel support
+        function showConfirmation(message, onConfirm, onCancel) {
             const confirmed = confirm(message);
-            if (confirmed && onConfirm) {
-                onConfirm();
+            if (confirmed) {
+                if (onConfirm) onConfirm();
+            } else {
+                if (onCancel) onCancel();
             }
         }
 
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const options = { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric', 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            };
-            document.getElementById('currentTime').textContent = now.toLocaleString('en-US', options);
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-
-        // Source selection
+        // B. Source selection with confirmation + clear screens + reset statuses
         document.querySelectorAll('[data-source]').forEach(btn => {
             btn.addEventListener('click', function() {
-                const source = this.getAttribute('data-source');
+                const source   = this.getAttribute('data-source');
                 const isActive = this.classList.contains('active');
+                const current  = state.selectedSource;
 
+                // Clicking the already-active source => deselect without prompt
                 if (isActive) {
                     this.classList.remove('active');
                     state.selectedSource = null;
-                    state.audioSource = DEFAULT_AUDIO_SOURCE;
+                    state.audioSource    = DEFAULT_AUDIO_SOURCE;
                     updateAudioSourceLabels(state.audioSource);
                     return;
                 }
 
+                // Switching from one source to another => confirm first
+                if (current && current !== source) {
+                    const ok = confirm(`Switch input from "${current}" to "${source}"?`);
+                    if (!ok) return;
+
+                    // Wipe both screens and reset statuses
+                    ['left', 'right'].forEach(side => {
+                        const screen   = document.getElementById(`${side}Screen` );
+                        const sourceEl = document.getElementById(`${side}Source` );
+                        const statusEl = document.getElementById(`${side}Status` );
+
+                        screen.classList.remove(
+                            'active','frozen','is-loading',
+                            'desktop','laptop','doccam','wireless','bluray','camera'
+                        );
+                        sourceEl.textContent = 'No Input';
+                        statusEl.textContent = 'Ready';
+                        if (side === 'left')  state.leftProjector  = null;
+                        if (side === 'right') state.rightProjector = null;
+                    });
+                }
+
+                // Select the new source
                 state.selectedSource = source;
 
-                // Update button states
+                // Update source button highlights
                 document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
-                // Automatically update audio source to match selected input
+                // Sync audio source label to selected input
                 state.audioSource = source;
                 updateAudioSourceLabels(state.audioSource);
             });
@@ -1034,8 +1357,9 @@
                 alert('Please select an input source first.');
             }
         });
+      
 
-// Blank buttons
+				// Blank buttons
         document.querySelector('[data-action="left-mute"]').addEventListener('click', function() {
             const leftScreen = document.getElementById('leftScreen');
             document.getElementById('leftSource').textContent = 'Blanked';
@@ -1050,28 +1374,55 @@
             rightScreen.classList.remove('active', 'desktop', 'laptop', 'doccam', 'wireless', 'bluray', 'camera');
         });
 
-        // Freeze buttons
-        document.querySelector('[data-action="left-freeze"]').addEventListener('click', function() {
-            if (state.leftProjector && state.isPowerOn) {
-                document.getElementById('leftStatus').textContent = 'Frozen';
-                alert('Left screen frozen. Current image will remain displayed.');
-            } else if (!state.isPowerOn) {
-                alert('Please power on the projectors first.');
-            } else {
-                alert('Please project something to the left screen first.');
-            }
-        });
+        // Freeze toggle for Left Screen
+        document.querySelector('[data-action="left-freeze"]')
+            ?.addEventListener('click', function () {
+                const screen = document.getElementById('leftScreen');
+                const status = document.getElementById('leftStatus');
 
-        document.querySelector('[data-action="right-freeze"]').addEventListener('click', function() {
-            if (state.rightProjector && state.isPowerOn) {
-                document.getElementById('rightStatus').textContent = 'Frozen';
-                alert('Right screen frozen. Current image will remain displayed.');
-            } else if (!state.isPowerOn) {
-                alert('Please power on the projectors first.');
-            } else {
-                alert('Please project something to the right screen first.');
-            }
-        });
+                if (!state.isPowerOn) {
+                    alert('Please power on the projectors first.');
+                    return;
+                }
+                if (!state.leftProjector) {
+                    alert('Please project something to the left screen first.');
+                    return;
+                }
+
+                // Toggle frozen class
+                const isFrozen = screen.classList.toggle('frozen');
+                status.textContent = isFrozen ? 'Frozen' : 'Projecting';
+
+                // Optionally change button label/icon
+                this.innerHTML = isFrozen
+                    ? 'Unfreeze <span class="icon">❄️</span>'
+                    : 'Freeze <span class="icon">❄️</span>';
+            });
+
+        // Freeze toggle for Right Screen
+        document.querySelector('[data-action="right-freeze"]')
+            ?.addEventListener('click', function () {
+                const screen = document.getElementById('rightScreen');
+                const status = document.getElementById('rightStatus');
+
+                if (!state.isPowerOn) {
+                    alert('Please power on the projectors first.');
+                    return;
+                }
+                if (!state.rightProjector) {
+                    alert('Please project something to the right screen first.');
+                    return;
+                }
+
+                // Toggle frozen class
+                const isFrozen = screen.classList.toggle('frozen');
+                status.textContent = isFrozen ? 'Frozen' : 'Projecting';
+
+                // Optionally change button label/icon
+                this.innerHTML = isFrozen
+                    ? 'Unfreeze <span class="icon">❄️</span>'
+                    : 'Freeze <span class="icon">❄️</span>';
+            });
 
         // Camera presets
         document.querySelector('[data-action="camera-preset-1"]').addEventListener('click', function() {
@@ -1157,6 +1508,214 @@
             }
         });
 
+    const lightButtons = document.querySelectorAll('.lights-btn');
+    lightButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            lightButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
+      
+        // ===== Simple Timer Feature (countdown + finish flash) =====
+        let timerInterval = null;
+
+        document.querySelector('[data-action="timer"]').addEventListener('click', function () {
+            // If timer is already running, stop it
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                document.getElementById('timerDisplay').textContent = '00:00';
+                this.textContent = 'Start Timer';
+                return;
+            }
+
+            // Prompt user for time (seconds or mm:ss)
+            const input = prompt('Enter timer (seconds or mm:ss):', '1:30');
+            if (!input) return;
+
+            let totalSeconds = 0;
+            if (input.includes(':')) {
+                const [m, s] = input.split(':');
+                const mins = parseInt(m, 10);
+                const secs = parseInt(s, 10);
+                if (isNaN(mins) || isNaN(secs) || secs >= 60) {
+                    alert('Please enter a valid mm:ss (seconds < 60).');
+                    return;
+                }
+                totalSeconds = mins * 60 + secs;
+            } else {
+                const secs = parseInt(input, 10);
+                if (isNaN(secs) || secs <= 0) {
+                    alert('Please enter a valid number of seconds.');
+                    return;
+                }
+                totalSeconds = secs;
+            }
+
+            const display = document.getElementById('timerDisplay');
+            const btn = this;
+            btn.textContent = 'Stop Timer';
+
+            function update() {
+                const mins = Math.floor(totalSeconds / 60);
+                const secs = totalSeconds % 60;
+                display.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    btn.textContent = 'Start Timer';
+                    document.body.classList.add('timer-flash');
+                    setTimeout(() => document.body.classList.remove('timer-flash'), 5000);
+                    alert('⏰ Time is up!');
+                }
+                totalSeconds--;
+            }
+
+            update(); // show immediately
+            timerInterval = setInterval(update, 1000);
+        });
+      
+        // ===== Annotation / Drawing overlay (mirrored to both screens) =====
+        (function () {
+            // Create and attach canvases to each preview screen
+            const leftScreen  = document.getElementById('leftScreen');
+            const rightScreen = document.getElementById('rightScreen');
+
+            const leftCanvas  = document.createElement('canvas');
+            const rightCanvas = document.createElement('canvas');
+            leftCanvas.className  = 'draw-canvas';
+            rightCanvas.className = 'draw-canvas';
+            leftScreen.appendChild(leftCanvas);
+            rightScreen.appendChild(rightCanvas);
+
+            // Collection helpers
+            const canvases = [leftCanvas, rightCanvas];
+            const contexts = canvases.map(c => c.getContext('2d'));
+
+            // Draw mode state
+            let drawEnabled = false;
+            let drawing = false;
+
+            // We track last position in *normalized* coordinates (0..1)
+            let lastU = 0, lastV = 0;
+
+            // Stroke style
+            const strokeColor = '#ffeb3b';
+            const strokeWidth = 3;
+
+            // Size a canvas to its element size (CSS px) and set DPR mapping
+            function resizeCanvasToElement(canvas) {
+                const rect = canvas.getBoundingClientRect();
+                const dpr  = window.devicePixelRatio || 1;
+                canvas.width  = Math.max(1, Math.round(rect.width  * dpr));
+                canvas.height = Math.max(1, Math.round(rect.height * dpr));
+                const ctx = canvas.getContext('2d');
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = strokeWidth;
+            }
+
+            function resizeAll() {
+                canvases.forEach(resizeCanvasToElement);
+            }
+
+            // Initialize and resize on window change
+            resizeAll();
+            window.addEventListener('resize', resizeAll);
+
+            // Convert an event on a particular canvas to *normalized* coords (0..1)
+            function getNormalizedPos(evt, canvas) {
+                const rect = canvas.getBoundingClientRect();
+                let cx, cy;
+                if (evt.touches && evt.touches[0]) {
+                    cx = evt.touches[0].clientX;
+                    cy = evt.touches[0].clientY;
+                } else {
+                    cx = evt.clientX;
+                    cy = evt.clientY;
+                }
+                const x = cx - rect.left;
+                const y = cy - rect.top;
+                const u = rect.width  > 0 ? x / rect.width  : 0;
+                const v = rect.height > 0 ? y / rect.height : 0;
+                return { u: Math.min(1, Math.max(0, u)), v: Math.min(1, Math.max(0, v)) };
+            }
+
+            // Draw a segment from (u0,v0) -> (u1,v1) across ALL canvases
+            function drawSegmentAll(u0, v0, u1, v1) {
+                canvases.forEach((canvas, i) => {
+                    const ctx  = contexts[i];
+                    const rect = canvas.getBoundingClientRect();
+                    const x0 = u0 * rect.width;
+                    const y0 = v0 * rect.height;
+                    const x1 = u1 * rect.width;
+                    const y1 = v1 * rect.height;
+                    ctx.beginPath();
+                    ctx.moveTo(x0, y0);
+                    ctx.lineTo(x1, y1);
+                    ctx.stroke();
+                });
+            }
+
+            // Pointer handlers bound to *each* canvas, but draw to both
+            function attachHandlers(canvas) {
+                function start(evt) {
+                    if (!drawEnabled) return;
+                    drawing = true;
+                    const p = getNormalizedPos(evt, canvas);
+                    lastU = p.u;
+                    lastV = p.v;
+                }
+                function move(evt) {
+                    if (!drawing || !drawEnabled) return;
+                    const p = getNormalizedPos(evt, canvas);
+                    drawSegmentAll(lastU, lastV, p.u, p.v);
+                    lastU = p.u;
+                    lastV = p.v;
+                }
+                function end() {
+                    drawing = false;
+                }
+
+                // Mouse
+                canvas.addEventListener('mousedown', start);
+                canvas.addEventListener('mousemove', move);
+                window.addEventListener('mouseup', end);
+
+                // Touch
+                canvas.addEventListener('touchstart', (e) => { start(e); e.preventDefault(); }, { passive: false });
+                canvas.addEventListener('touchmove',  (e) => { move(e);  e.preventDefault(); }, { passive: false });
+                window.addEventListener('touchend', end);
+                window.addEventListener('touchcancel', end);
+            }
+
+            canvases.forEach(attachHandlers);
+
+            // Toggle Draw Mode
+            const drawToggleBtn = document.getElementById('drawToggleBtn');
+            drawToggleBtn.addEventListener('click', function () {
+                drawEnabled = !drawEnabled;
+                document.body.classList.toggle('draw-enabled', drawEnabled);
+                this.classList.toggle('active', drawEnabled);
+                this.textContent = drawEnabled ? 'Disable Draw Mode' : 'Draw Mode';
+            });
+
+            // Clear all annotations (both canvases) — full wipe despite DPR transform
+            const clearBtn = document.getElementById('clearAnnotationsBtn');
+            clearBtn.addEventListener('click', function () {
+                canvases.forEach((c, i) => {
+                    const ctx = contexts[i];
+                    ctx.save();                       // save current (DPR-scaled) state
+                    ctx.setTransform(1, 0, 0, 1, 0, 0); // reset to identity
+                    ctx.clearRect(0, 0, c.width, c.height); // clear full pixel buffer
+                    ctx.restore();                    // restore DPR transform + styles
+                });
+            });
+        })();
+
         // POWER ON
         document.getElementById('powerOn').addEventListener('click', function () {
             if (state.isPowerOn) return;      // already ON -> ignore
@@ -1212,6 +1771,423 @@
                 updatePowerUI();                 // disables OFF, enables ON, locks controls
             });
         });
+      
+        // ===== Sign-in QR toggle =====
+        (function () {
+            const btn  = document.getElementById('signInBtn');
+            const panel = document.getElementById('qrPanel');
+            const close = document.getElementById('qrCloseBtn');
+
+            function show() {
+                panel.classList.add('show');
+                panel.setAttribute('aria-hidden','false');
+            }
+            function hide() {
+                panel.classList.remove('show');
+                panel.setAttribute('aria-hidden','true');
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const visible = panel.classList.contains('show');
+                if (visible) hide(); else show();
+            });
+
+            close.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hide();
+            });
+
+            // Click outside hides
+            document.addEventListener('click', (e) => {
+                if (!panel.classList.contains('show')) return;
+                if (!panel.contains(e.target) && e.target !== btn) hide();
+            });
+
+            // Esc hides
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && panel.classList.contains('show')) hide();
+            });
+        })();
+      
     </script>
 </body>
 </html>
+                              
+                              
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSU Classroom Control</title>
+    <style>
+        * {
+            margi				;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+       body {
+   		 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   		 background: #782F40 url('https://i.ibb.co/Gfd1jGk9/FSU-background.jpg') center/cover no-repeat fixed;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+    	overflow: hidden;
+}
+      
+        .lights-btn.active {
+            background: #782F40;
+            color: white;
+        }
+
+        .lights-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;       
+        width: 103%;
+        height: 20%;    
+        padding: 30px ;   
+        font-size: 14px;   
+        border-radius: 8px;
+        border: 1px solid #782F40;
+        background: white;
+        color: #782F40;
+        cursor: pointer;
+        transition: all 0.2s;
+        }
+
+        .lights-btn:hover {
+        background: #782F40;
+        color: white;
+        }
+
+        .header {
+            background: #572932;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fsu-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .time {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .help-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .help-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .help-modal.show {
+            display: flex;
+        }
+
+        .help-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .help-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .help-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .help-content::-webkit-scrollbar-thumb {
+            background: #782F40;
+            border-radius: 4px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #782F40;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #5a2330;
+            transform: scale(1.1);
+        }
+
+        .help-content h2 {
+            color: #782F40;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .help-content h3 {
+            color: #782F40;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .help-content p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .help-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .help-content li {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .help-content strong {
+            color: #782F40;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .preview-section {
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            flex: 0 0 auto;
+            height: 700px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-label {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .audio-indicator {
+            background: rgba(40, 167, 69, 0.2);
+            border: 2px solid #28a745;
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .preview-container {
+            flex: 1;
+            display: flex;
+          	align-items: stretch;
+          	justify-content: center;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+        }
+
+        .preview-screen {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+          	flex: 1;
+            flex-direction: column;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-screen.active {
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .screen-title {
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .screen-status {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+        }
+
+        .screen-source {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            flex: 0 0 auto;
+        }
+
+        .control-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .control-section.sources {
+            grid-column: span 3;
+        }
+
+        .control-section.display {
+            grid-column: span 2;
+        }
+
+        .control-section.camera {
+            grid-column: span 1;
+        }
+
+        .control-section.audio {
+            grid-column: span 2;
+        }
+
+        .control-section.volume {
+            grid-column: span 2;
+        }
+
+        .control-section.power {
+            grid-column: span 1;
+        }
+
+        .section-title {
+            color: #782F40;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        .button-grid.triple {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .button-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .control-btn {
+            background: white;
+            border: 2px solid #782F40;
+            border-radius: 8px;
+            padding: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            color: #782F40;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            display: flex;
+          flex-direction: column;
+      }
+            align-it
