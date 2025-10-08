@@ -19,7 +19,167 @@
 			flex-direction: column;
     	overflow: hidden;
 }
-      
+ /*Nicholas*/
+      	        .fullscreen-touch-msg {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(120,47,64,0.93);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s;
+            z-index: 2200;
+        }
+        .fullscreen-touch-msg.show {
+            opacity: 1;
+        }
+        .fullscreen-mode {
+            position: fixed;
+            top:0; left:0; width:100vw; height:100vh;
+            background: rgba(34,34,34,0.97);
+            z-index: 2000;
+            display: none;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(.55,0,.1,1), box-shadow 0.5s cubic-bezier(.55,0,.1,1);
+            box-shadow: 0 0 0 0 rgba(120,47,64,0);
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+
+        .fullscreen-mode.show {
+            display: block;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(120,47,64,0);
+        }
+
+
+        .fullscreen-mode.zoomed {
+            transform: scale(0.85);
+            border-radius: 30px;
+            box-shadow: 0 0 60px 0 rgba(120,47,64,0.7);
+        }
+
+        .fullscreen-mode.desktop   { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_p-72rMY56AoHEOV0AjO5qoJphB4Th2mUSA&s') center/cover no-repeat; }
+        .fullscreen-mode.laptop    { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Urb8rFwF_mA2bM3wdPoyA_gqW5cK2rwLEA&s') center/cover no-repeat; }
+        .fullscreen-mode.doccam    { background: url('https://i.ytimg.com/vi/BzjejJyTr8Y/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAHR6k_P57rdXjR55YIRVH7fsiJRw') center/cover no-repeat; }
+        .fullscreen-mode.wireless  { background: url('https://cdsassets.apple.com/live/7WUAS350/images/macos/sequoia/macos-sequoia-ios-18-iphone-mirroring-window-with-controls.png') center/cover no-repeat; }
+        .fullscreen-mode.bluray    { background: url('images/bluray.jpg') center/cover no-repeat; }
+        .fullscreen-mode.camera    { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagVR4Rd_Sjt3sUaFyFWpqAM9wlZzVnHpyeA&s') center/cover no-repeat; }
+
+
+        .fullscreen-info {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(34,34,34,0.85);
+            color: white;
+            border-radius: 15px;
+            padding: 24px 36px;
+            box-shadow: 0 4px 16px rgba(120,47,64,0.3);
+            font-size: 18px;
+            font-family: inherit;
+            text-align: center;
+            opacity: 0.95;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+
+        .fullscreen-mode.zoomed .fullscreen-info {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+
+        .fullscreen-close-btn {
+            display: none;
+            position: absolute;
+            top: 22px;
+            right: 32px;
+            background: rgba(120,47,64,0.95);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .fullscreen-mode.zoomed .fullscreen-close-btn {
+            display: block;
+        }
+        .fullscreen-close-btn:hover {
+            background: #782F40;
+            transform: scale(1.15);
+        }
+
+
+        .fullscreen-label {
+            font-size: 16px;
+            color: #cfd8dc;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .fullscreen-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .fullscreen-status {
+            font-size: 18px;
+            color: #ffecb3;
+            margin-bottom: 8px;
+        }
+        .fullscreen-source {
+            font-size: 22px;
+            color: #c8e6c9;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+              .fullscreen-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .fullscreen-btn:hover {
+            background: #28a745;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .fullscreen-btn:active {
+            transform: scale(0.98);
+        }
         .lights-btn.active {
             background: #782F40;
             color: white;
@@ -41,7 +201,7 @@
         cursor: pointer;
         transition: all 0.2s;
         }
-
+/*Nicholas*/
         .lights-btn:hover {
         background: #782F40;
         color: white;
@@ -694,7 +854,7 @@
         .preview-screen.doccam    { background: url('https://i.ytimg.com/vi/BzjejJyTr8Y/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAHR6k_P57rdXjR55YIRVH7fsiJRw') center/cover no-repeat; }
         .preview-screen.wireless  { background: url('https://cdsassets.apple.com/live/7WUAS350/images/macos/sequoia/macos-sequoia-ios-18-iphone-mirroring-window-with-controls.png') center/cover no-repeat; }
         .preview-screen.bluray    { background: url('images/bluray.jpg') center/cover no-repeat; }
-        .preview-screen.camera    { background: url('images/camera.jpg') center/cover no-repeat; }
+        .preview-screen.camera    { background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagVR4Rd_Sjt3sUaFyFWpqAM9wlZzVnHpyeA&s') center/cover no-repeat; }
     
       img {
       	image-rendering: pixelated;
@@ -764,14 +924,14 @@
         /* Make the preview shorter so controls fit below on typical laptops */
         .preview-section { height: 560px; }     /* was ~700px; adjust as needed */
 
-                 /* Sign-in button matches your header style */
+                /* Sign-in button matches your header style */
         .signin-btn {
             background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 5px solid rgba(255,255,255,0.3);
             color: #fff;
             padding: 6px 10px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 20;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -785,7 +945,7 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            width: 260px;
+            width: 300px;
             background: #fff;
             color: #333;
             border-radius: 10px;
@@ -801,7 +961,7 @@
             align-items: center;
             justify-content: space-between;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 25px;
             color: #782F40;
             padding: 8px 10px;
             border-bottom: 1px solid rgba(0,0,0,0.06);
@@ -809,7 +969,7 @@
         .qr-close {
             background: transparent;
             border: none;
-            font-size: 20px;
+            font-size: 25px;
             line-height: 1;
             color: #782F40;
             cursor: pointer;
@@ -834,6 +994,13 @@
             color: #666;
             font-weight: 700;
             font-size: 24px;
+        }
+
+        .qr-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 6px;
+            display: block;
         }
 
   
@@ -863,7 +1030,7 @@
         </div>
         <div class="qr-body">
             <!-- Placeholder QR square -->
-            <div class="qr-placeholder">QR</div>
+            <img src="https://i.imgur.com/GuT6u5z.png" alt="Sign-in QR Code" class="qr-image">
         </div>
     </div>
 
@@ -939,7 +1106,29 @@
                         <div class="screen-title">Left Projector</div>
                         <div class="screen-status" id="leftStatus">Ready</div>
                     </div>
+ 
                     <div class="screen-source" id="leftSource">No Input</div>
+                  <!--Nicholas-->
+                <div>
+                    <button class="fullscreen-btn" id="leftFullscreenBtn">
+                        <span>⛶</span>
+                        Fullscreen
+                    </button>
+                    </div>
+                <div id="fullscreenMode" class="fullscreen-mode" tabindex="-1">
+                    <button class="fullscreen-close-btn" id="fullscreenCloseBtn" aria-label="Close Fullscreen Overlay">X</button>
+                    <div id="fullscreenTouchMsg" class="fullscreen-touch-msg">This display is not touch compatible</div>
+                    <div class="fullscreen-info" id="fullscreenInfo">
+                        <span class="fullscreen-label">Projector:</span>
+                        <span class="fullscreen-title" id="fullscreenTitle"></span>
+                        <span class="fullscreen-label">Status:</span>
+                        <span class="fullscreen-status" id="fullscreenStatus"></span>
+                        <span class="fullscreen-label">Input:</span>
+                        <span class="fullscreen-source" id="fullscreenBody"></span>
+                    </div>
+                </div>
+<!--Nicholas-->
+
                     <!-- Loading spinner overlay (shown during warm-up) -->         
                     <div class="loading-overlay" aria-hidden="true">
                         <div class="spinner" role="status" aria-label="Warming up…"></div>
@@ -957,6 +1146,13 @@
                     <div class="screen-header">
                         <div class="screen-title">Right Projector</div>
                         <div class="screen-status" id="rightStatus">Ready</div>
+                    </div>
+                    <div>
+                     
+                    <button class="fullscreen-btn" id="rightFullscreenBtn">
+                        <span>⛶</span>
+                        Fullscreen
+                    </button>
                     </div>
                     <div class="screen-source" id="rightSource">No Input</div>
                     <!-- Loading spinner overlay (shown during warm-up) -->         
@@ -1810,6 +2006,106 @@
             });
         })();
       
+      //Nicholas 
+const fullscreenMode = document.getElementById('fullscreenMode');
+const fullscreenTitle = document.getElementById('fullscreenTitle');
+const fullscreenStatus = document.getElementById('fullscreenStatus');
+const fullscreenBody = document.getElementById('fullscreenBody');
+const fullscreenInfo = document.getElementById('fullscreenInfo');
+const fullscreenCloseBtn = document.getElementById('fullscreenCloseBtn');
+
+let zoomOutTimer = null;
+let isZoomed = false;
+
+
+function updateFullscreenInfo(title, status, source) {
+    fullscreenTitle.textContent = title;
+    fullscreenStatus.textContent = status;
+    fullscreenBody.textContent = source;
+}
+
+function showFullscreen(side) {
+    const screen = side === 'left' ? document.getElementById('leftScreen') : document.getElementById('rightScreen');
+    const sourceText = side === 'left' ? document.getElementById('leftSource').textContent : document.getElementById('rightSource').textContent;
+    const statusText = side === 'left' ? document.getElementById('leftStatus').textContent : document.getElementById('rightStatus').textContent;
+    const title = side === 'left' ? 'Left Projector' : 'Right Projector';
+    
+    const fullscreenTouchMsg = document.getElementById('fullscreenTouchMsg');
+let touchMsgTimer = null;
+
+    fullscreenTouchMsg.classList.add('show');
+    if (touchMsgTimer) {
+        clearTimeout(touchMsgTimer);
+    }
+    touchMsgTimer = setTimeout(() => {
+        fullscreenTouchMsg.classList.remove('show');
+    }, 3000);
+    fullscreenMode.className = 'fullscreen-mode show';
+    const sourceClasses = Array.from(screen.classList).filter(cls =>
+        ['desktop', 'laptop', 'doccam', 'wireless', 'bluray', 'camera'].includes(cls)
+    );
+
+
+    fullscreenMode.classList.add(...sourceClasses);
+    updateFullscreenInfo(title, statusText, sourceText);
+    fullscreenMode.classList.remove('zoomed');
+    isZoomed = false;
+    fullscreenInfo.style.opacity = '0';
+    if (zoomOutTimer) {
+        clearTimeout(zoomOutTimer);
+        zoomOutTimer = null;
+    }
+}
+fullscreenMode.addEventListener('click', function(e) {
+    if (e.target === fullscreenCloseBtn) return;
+
+    if (!isZoomed) {
+        fullscreenMode.classList.add('zoomed');
+        isZoomed = true;
+        fullscreenInfo.style.opacity = '1';
+
+        zoomOutTimer = setTimeout(() => {
+            fullscreenMode.classList.remove('zoomed');
+            isZoomed = false;
+            fullscreenInfo.style.opacity = '0';
+        }, 5000);
+    } else {
+ 
+        fullscreenMode.classList.remove('zoomed');
+        isZoomed = false;
+        fullscreenInfo.style.opacity = '0';
+
+        if (zoomOutTimer) {
+            clearTimeout(zoomOutTimer);
+            zoomOutTimer = null;
+        }
+    }
+});
+
+    fullscreenCloseBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        fullscreenMode.classList.remove('show', 'zoomed');
+        isZoomed = false;
+        fullscreenInfo.style.opacity = '0';
+        if (zoomOutTimer) {
+            clearTimeout(zoomOutTimer);
+            zoomOutTimer = null;
+        }
+    });
+
+    fullscreenInfo.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    document.getElementById('leftFullscreenBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        showFullscreen('left');
+    });
+    document.getElementById('rightFullscreenBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        showFullscreen('right');
+    });
+//Nicholas 
     </script>
 </body>
 </html>
