@@ -939,14 +939,15 @@
             color: #fff;
             padding: 6px 10px;
             border-radius: 8px;
-            font-size: 20;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.2s;
         }
+      
         .signin-btn:hover {
             background: rgba(255,255,255,0.2);
             border-color: rgba(255,255,255,0.5);
-}
+
         }
 
         /* Small QR panel pinned at the very top-left */
@@ -1011,6 +1012,15 @@
             border-radius: 6px;
             display: block;
         }
+
+		/* Pin the Sign In button to the top-left of the screen, above layout flow */
+				#signInBtn.signin-btn {
+					position: fixed;
+					top: calc(env(safe-area-inset-top, 0px) + 12px);
+					left: calc(env(safe-area-inset-left, 0px) + 12px);
+					z-index: 1100; /* above header/banner */
+					margin: 0;     /* ignore any earlier margins */
+				}
 
   
     </style>
@@ -1394,6 +1404,16 @@
             const cls = SOURCE_CLASS[sourceLabel];
             if (cls) screenEl.classList.add(cls);
         }
+      
+				const ALL_SOURCE_CLASSES = Object.values(SOURCE_CLASS);
+
+				function wipeScreen(side) {
+					const { screen, sourceEl, statusEl } = getSideEls(side);
+					screen.classList.remove('active', 'frozen', 'is-loading', ...ALL_SOURCE_CLASSES);
+					screen.style.backgroundImage = '';
+					sourceEl.textContent = '—';
+					statusEl.textContent = 'Powered Off';
+				}
       
         function updateAudioSourceLabels(source) {
             document.getElementById('audioSource').textContent = source;
@@ -1954,28 +1974,43 @@
             });
         });
 
-        // POWER OFF
-        document.getElementById('powerOff').addEventListener('click', function () {
-            if (!state.isPowerOn) return;     // already OFF -> ignore
+		// POWER OFF
+		document.getElementById('powerOff').addEventListener('click', function () {
+			if (!state.isPowerOn) return; // already OFF -> ignore
 
-            showConfirmation('Turn OFF projectors?', () => {
-                state.isPowerOn = false;
+			showConfirmation('Turn OFF projectors?', () => {
+				state.isPowerOn = false;
 
-                // reset UI
-                document.getElementById('leftSource').textContent  = 'No Input';
-                document.getElementById('rightSource').textContent = 'No Input';
-                document.getElementById('leftStatus').textContent  = 'Off';
-                document.getElementById('rightStatus').textContent = 'Off';
-                document.getElementById('leftScreen').classList.remove('active','is-loading');
-                document.getElementById('rightScreen').classList.remove('active','is-loading');
+				// collect all source classes (e.g., desktop, laptop, doccam, wireless, bluray, camera)
+				const sourceClasses = Object.values(SOURCE_CLASS);
 
-                // also clear any “projecting” state you track
-                state.leftProjector  = null;
-                state.rightProjector = null;
+				// LEFT screen: clear classes, inline bg, labels
+				const leftScreen  = document.getElementById('leftScreen');
+				const leftSource  = document.getElementById('leftSource');
+				const leftStatus  = document.getElementById('leftStatus');
+				leftScreen.classList.remove('active', 'is-loading', 'frozen', ...sourceClasses);
+				leftScreen.style.backgroundImage = '';
+				leftSource.textContent = 'No Input';
+				leftStatus.textContent = 'Off';
 
-                updatePowerUI();                 // disables OFF, enables ON, locks controls
-            });
-        });
+				// RIGHT screen: clear classes, inline bg, labels
+				const rightScreen = document.getElementById('rightScreen');
+				const rightSource = document.getElementById('rightSource');
+				const rightStatus = document.getElementById('rightStatus');
+				rightScreen.classList.remove('active', 'is-loading', 'frozen', ...sourceClasses);
+				rightScreen.style.backgroundImage = '';
+				rightSource.textContent = 'No Input';
+				rightStatus.textContent = 'Off';
+
+				// clear tracked projecting state and selection
+				state.leftProjector  = null;
+				state.rightProjector = null;
+				state.selectedSource = null;
+
+				// lock UI per powered-off state
+				updatePowerUI();
+			});
+		});
       
         // ===== Sign-in QR toggle =====
         (function () {
@@ -2114,6 +2149,10 @@ fullscreenMode.addEventListener('click', function(e) {
         e.stopPropagation();
         showFullscreen('right');
     });
+      
+     updatePowerUI();
+
+      
 //Nicholas 
     </script>
 </body>
